@@ -10,20 +10,22 @@ module if_stage (
     output logic [31:0] pc_new
 );
 
+    // PC + 4 is always available
+    always_comb begin
+        pc_new = address + 32'd4;
+    end
+
     // Program Counter register
     always_ff @(posedge clk or posedge reset) begin
         if (reset)
             address <= 32'h8000_0000;
-        else if (!stall)
-            address <= pc_new;
-    end
-
-    // Next PC calculation
-    always_comb begin
-        pc_new = address + 32'd4;
-
-        if (and_out)
-            pc_new = pc_signed_offset;
+        else if (!stall) begin
+            if (and_out)
+                address <= pc_signed_offset;
+            else
+                address <= pc_new;
+        end
     end
 
 endmodule
+
