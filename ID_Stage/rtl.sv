@@ -22,7 +22,6 @@ module id_stage (
     output logic        mux_inp
 );
 
-    // Internal signals
     logic [4:0] rs1_sel;
     logic [4:0] rs2_sel;
     logic [4:0] rd_sel;
@@ -33,7 +32,7 @@ module id_stage (
     logic reg_write;
     logic reg_write_final;
 
-    // 1. Instruction Decoder
+    // Instruction Decoder
     decoder dec (
         .instruction(instruction),
         .rs1(rs1_sel),
@@ -47,7 +46,7 @@ module id_stage (
         .fn7_5(fn7_5)
     );
 
-    // 2. Immediate Generator
+    // Immediate Generator
     imm_generator imm_gen (
         .imm_input(imm_input),
         .fn3(fn3_out_d),
@@ -56,7 +55,7 @@ module id_stage (
         .imm_output(imm_out)
     );
 
-    // 3. Register File
+    // Register File
     assign reg_write_final = reg_write && !stall;
 
     register_file rf (
@@ -71,7 +70,7 @@ module id_stage (
         .rs2_data(rs2_data)
     );
 
-    // 4. Main Control
+    // Main Control
     main_control control (
         .opcode(opcode_out_d),
         .fn3(fn3_out_d),
